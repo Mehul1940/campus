@@ -1,6 +1,6 @@
 # File Tree: campus
 
-**Generated:** 2/15/2026, 5:03:56 PM
+**Generated:** 2/15/2026, 7:28:08 PM
 **Root Path:** `d:\Project\Task\campus`
 
 ```
@@ -98,6 +98,7 @@
 │   │   └── 🖼️ veg-sandwich.webp
 │   └── 📁 profile_pics
 │       ├── 🖼️ 1.jpg
+│       ├── 🖼️ 1_eUKzNux.jpg
 │       ├── 🖼️ 2.jpg
 │       └── 🖼️ 3.jpg
 ├── 📁 notifications
@@ -178,6 +179,7 @@
 ├── ⚙️ .gitignore
 ├── 📝 Folder_Structure.md
 ├── 📝 Readme.md
+├── 📝 crud.md
 ├── 📄 db.sqlite3
 ├── 🐍 manage.py
 └── 📄 requirements.txt
