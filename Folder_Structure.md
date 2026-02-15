@@ -1,6 +1,6 @@
 # File Tree: campus
 
-**Generated:** 2/15/2026, 4:21:30 PM
+**Generated:** 2/15/2026, 5:03:56 PM
 **Root Path:** `d:\Project\Task\campus`
 
 ```
@@ -174,8 +174,13 @@
 │   ├── 🐍 tests.py
 │   ├── 🐍 urls.py
 │   └── 🐍 views.py
+├── ⚙️ .gitattributes
+├── ⚙️ .gitignore
+├── 📝 Folder_Structure.md
+├── 📝 Readme.md
 ├── 📄 db.sqlite3
-└── 🐍 manage.py
+├── 🐍 manage.py
+└── 📄 requirements.txt
 ```
 
 ---
