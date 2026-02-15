@@ -1,0 +1,89 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div id="heroCarousel" class="carousel slide carousel-fade shadow-sm mb-5" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active rounded-circle"
+            style="width: 12px; height: 12px;"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" class="rounded-circle"
+            style="width: 12px; height: 12px;"></button>
+    </div>
+    <div class="carousel-inner">
+
+        <div class="carousel-item active" style="height: 550px;">
+            <img src="static/images/banner/campus.avif" class="d-block w-100 h-100 object-fit-cover" alt="...">
+            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center h-100 mb-0 pb-0">
+                <div class="p-3" style="max-width: 800px;">
+                    <h1 class="display-4 fw-600 mb-2 text-white">Smart Campus <span class="text-white">Life.</span></h1>
+                    <p class="lead fs-4 mb-4 opacity-90">Everything you need in one centralized, high-speed platform.
+                    </p>
+                    <a href="{% url 'core:about' %}" class="btn btn-primary btn-sm  px-5 py-3 fw-bold shadow-lg">Explore
+                        Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item" style="height: 550px;">
+            <img src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1986&auto=format&fit=crop"
+                class="d-block w-100 h-100 object-fit-cover" alt="...">
+            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center h-100 mb-0 pb-0">
+                <div class="p-3" style="max-width: 800px;">
+                    <h1 class="display-4 fw-800 mb-3 text-white">Fresh Food, <span class="text-white">Zero Lines.</span>
+                    </h1>
+                    <p class="lead fs-5 mb-4 opacity-90">Order from the canteen directly through your phone and skip the
+                        wait.</p>
+                    <a href="{% url 'canteen:menu' %}" class="btn btn-success btn-sm  px-5 py-3 fw-bold shadow-lg">Order
+                        Meal</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="container">
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="card bg-secondary text-white h-100 rounded-5 p-4 border-0 shadow-lg">
+                <div class="card-body">
+                    <span class="badge bg-white text-dark mb-3">Featured</span>
+                    <h2 class="fw-800 display-6">Upcoming Campus <br>Hackathon 2026</h2>
+                    <p class="opacity-75">Registration is now open for all engineering students.</p>
+                    <a href="{% url 'events:list' %}" class="btn btn-light  px-4 mt-3 fw-bold">Sign Up Today</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card bg-white h-100 rounded-5 p-3 shadow-sm text-center">
+                        <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-4 d-inline-block mx-auto mb-3">
+                            <i class="bi bi-search fs-2"></i>
+                        </div>
+                        <h6 class="fw-bold">Lost & Found</h6>
+                        <p class="small text-muted mb-0">Recover your items instantly.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-white h-100 rounded-5 p-3 shadow-sm text-center">
+                        <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-4 d-inline-block mx-auto mb-3">
+                            <i class="bi bi-shield-lock fs-2"></i>
+                        </div>
+                        <h6 class="fw-bold">Safety Center</h6>
+                        <p class="small text-muted mb-0">Emergency contact & support.</p>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card bg-dark text-white rounded-5 p-4 shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="fw-bold mb-0">Campus Status</h5>
+                                <p class="small text-white-50 mb-0">All systems operational</p>
+                            </div>
+                            <span class="badge bg-success rounded-circle p-2"><i class="bi bi-check"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

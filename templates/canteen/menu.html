@@ -1,0 +1,213 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Canteen - Campus Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Header Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-md-8">
+            <h1 class="fw-800 mb-2">
+                <i class="bi bi-egg-fried text-primary me-2"></i>
+                Canteen Menu
+            </h1>
+            <p class="text-muted mb-0">
+                Fresh meals prepared daily. Pre-order and skip the queue.
+            </p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a href="{% url 'canteen:cart' %}" class="btn btn-primary px-4 fw-bold shadow-sm">
+                <i class="bi bi-cart3 me-2"></i>View Cart
+            </a>
+        </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="mb-4 text-center text-md-start">
+        <a href="{% url 'canteen:menu' %}"
+            class="btn btn-sm {% if not selected_category %}btn-primary{% else %}btn-outline-secondary{% endif %}  px-4 me-2 mb-2">
+            All Items
+        </a>
+
+        {% for category in categories %}
+        <a href="?category={{ category }}"
+            class="btn btn-sm {% if selected_category == category %}btn-primary{% else %}btn-outline-secondary{% endif %}  px-4 me-2 mb-2">
+            {{ category|title }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Menu Grid -->
+    <div class="row g-4">
+
+        {% if menu_items %}
+        {% for item in menu_items %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="card border-0 shadow-sm h-100">
+
+                <img src="{{ item.image.url }}" class="card-img-top" style="height:180px; object-fit:cover;"
+                    alt="{{ item.name }}">
+
+                <div class="card-body d-flex flex-column">
+
+                    <!-- Category Badge -->
+                    <span class="badge bg-light text-primary border border-primary-subtle mb-2 small">
+                        {{ item.get_category_display|upper }}
+                    </span>
+
+                    <!-- Title -->
+                    <h5 class="fw-bold">{{ item.name }}</h5>
+
+                    <!-- Description -->
+                    <p class="text-muted small flex-grow-1">
+                        {{ item.description|truncatewords:12 }}
+                    </p>
+
+                    <!-- Prep Time -->
+                    <div class="mb-3">
+                        <span class="badge bg-secondary-subtle text-secondary small">
+                            <i class="bi bi-stopwatch me-1"></i>
+                            {{ item.preparation_time }} mins
+                        </span>
+                    </div>
+
+                    <!-- Price + Button -->
+                    <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                        <span class="fw-bold text-primary fs-5">
+                            ₹{{ item.price }}
+                        </span>
+
+                        <button class="btn btn-dark btn-sm add-to-cart-btn" data-item-id="{{ item.id }}">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-search text-muted display-4"></i>
+            <h5 class="mt-3 fw-bold">No Items Found</h5>
+            <p class="text-muted">Try another category.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+
+<!-- Add To Cart Modal -->
+<div class="modal fade" id="addToCartModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+
+            <!-- Header -->
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-cart-plus text-primary me-2"></i>
+                    Add to Order
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body pt-2">
+
+                <!-- Quantity Section -->
+                <div class="text-center">
+
+                    <p class="text-muted small mb-2">Select Quantity</p>
+
+                    <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+
+                        <button class="btn btn-outline-secondary rounded-circle" id="decreaseQty">
+                            <i class="bi bi-dash"></i>
+                        </button>
+
+                        <input type="number" id="quantity" class="form-control text-center fw-bold fs-5" value="1"
+                            min="1" max="10" style="width:90px;" readonly>
+
+                        <button class="btn btn-outline-secondary rounded-circle" id="increaseQty">
+                            <i class="bi bi-plus"></i>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-0 pt-0">
+                <button class="btn btn-primary w-100 fw-bold" id="confirmAddCart">
+                    <i class="bi bi-check-lg me-1"></i>
+                    Add to Cart
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    let selectedItemId = null;
+    const cartModal = new bootstrap.Modal(document.getElementById('addToCartModal'));
+
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            selectedItemId = this.dataset.itemId;
+            document.getElementById('quantity').value = 1;
+            cartModal.show();
+        });
+    });
+
+    document.getElementById('decreaseQty').onclick = function () {
+        let qty = parseInt(document.getElementById('quantity').value);
+        if (qty > 1) {
+            document.getElementById('quantity').value = qty - 1;
+        }
+    };
+
+    document.getElementById('increaseQty').onclick = function () {
+        let qty = parseInt(document.getElementById('quantity').value);
+        if (qty < 10) {
+            document.getElementById('quantity').value = qty + 1;
+        }
+    };
+
+
+    document.getElementById('confirmAddCart').onclick = async function () {
+        const quantityValue = parseInt(document.getElementById('quantity').value);
+        try {
+            const response = await axios.post(
+                "{% url 'canteen:add_to_cart' %}",
+                { item_id: selectedItemId, quantity: quantityValue },
+                { headers: { "X-CSRFToken": "{{ csrf_token }}" } }
+            );
+
+            if (response.data.success) {
+                cartModal.hide();
+                location.reload();  // or update cart count dynamically
+            } else {
+                alert(response.data.message || 'Add to cart failed');
+            }
+        } catch (error) {
+            console.error(error);
+            if (error.response && error.response.status === 401) {
+                alert('Please log in to add items to cart');
+                window.location.href = "{% url 'login' %}?next={% url 'canteen:menu' %}";
+            } else {
+                alert('Add to cart failed');
+            }
+        }
+    };
+
+</script>
+{% endblock %}

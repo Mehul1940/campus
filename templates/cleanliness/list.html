@@ -1,0 +1,110 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Cleanliness Reports - Campus Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5 align-items-center g-3">
+        <div class="col-md-8 text-center text-md-start">
+            <h1 class="fw-bolder mb-1">
+                <i class="bi bi-broom text-primary me-2"></i>Cleanliness Reports
+            </h1>
+            <p class="text-muted">Monitor and maintain campus hygiene standards</p>
+        </div>
+        <div class="col-md-4 text-center text-md-end">
+            <a href="{% url 'cleanliness:submit' %}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
+                <i class="bi bi-plus-lg me-1"></i> Report Issue
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-5">
+        <div class="card-body p-3">
+            <div class="d-flex align-items-center flex-wrap gap-2">
+                <span class="small fw-bold text-secondary me-2"><i class="bi bi-filter-left me-1"></i>Status:</span>
+
+                <a href="{% url 'cleanliness:list' %}"
+                    class="btn btn-sm px-3 {% if not selected_status %}btn-primary{% else %}btn-light border{% endif %}">
+                    All
+                </a>
+
+                <a href="?status=open"
+                    class="btn btn-sm px-3 {% if selected_status == 'open' %}btn-danger{% else %}btn-outline-danger border-0{% endif %}">
+                    Open
+                </a>
+
+                <a href="?status=in_progress"
+                    class="btn btn-sm px-3 {% if selected_status == 'in_progress' %}btn-warning{% else %}btn-outline-warning border-0{% endif %}">
+                    In Progress
+                </a>
+
+                <a href="?status=resolved"
+                    class="btn btn-sm px-3 {% if selected_status == 'resolved' %}btn-success{% else %}btn-outline-success border-0{% endif %}">
+                    Resolved
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% if reports %}
+        {% for report in reports %}
+        <div class="col-lg-6">
+            <div
+                class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden border-start border-4 
+                        {% if report.severity == 'low' %}border-success{% elif report.severity == 'medium' %}border-warning{% elif report.severity == 'high' %}border-danger{% else %}border-dark{% endif %}">
+
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="fw-bold mb-1">
+                                <i class="bi bi-geo-alt-fill text-danger me-1 small"></i>{{ report.location }}
+                            </h5>
+                            <span class="badge bg-light text-dark border rounded-pill fw-normal px-2"
+                                style="font-size: 0.7rem;">
+                                Reported By: {{ report.reported_by }}
+                            </span>
+                        </div>
+
+                        <span
+                            class="badge rounded-pill px-3 py-2 fw-bold
+                                    {% if report.severity == 'low' %}bg-success text-white{% elif report.severity == 'medium' %}bg-warning text-dark{% elif report.severity == 'high' %}bg-danger text-white{% else %}bg-dark text-white{% endif %}">
+                            {{ report.get_severity_display }}
+                        </span>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <p class="text-muted small mb-0 fst-italic">
+                            "{{ report.issue_description|truncatewords:25 }}"
+                        </p>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="small text-secondary">
+                            <i class="bi bi-calendar3 me-1"></i>{{ report.report_date|date:"M d, Y" }}
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <span
+                                class="badge {% if report.status == 'open' %}bg-danger{% elif report.status == 'in_progress' %}bg-warning text-dark{% else %}bg-success{% endif %} rounded-pill px-3 shadow-sm">
+                                {{ report.get_status_display }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <div class="bg-light rounded-5 py-5 border border-secondary border-opacity-25">
+                <i class="bi bi-shield-check text-primary display-1 opacity-25"></i>
+                <h3 class="fw-bold mt-4">Everything looks clean!</h3>
+                <p class="text-muted">No cleanliness issues have been reported for this category.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

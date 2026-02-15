@@ -1,0 +1,45 @@
+{% extends 'auth/auth_base.html' %}
+{% block title %}Sign In | Campus Hub{% endblock %}
+
+{% block auth_content %}
+<div class="auth-card">
+    <div class="mb-5">
+        <h2 class="fw-800 mb-2">Welcome back</h2>
+        <p class="text-muted">Enter your account details to continue.</p>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="form-label fw-bold text-uppercase">Username</label>
+            <input type="text" class="form-control shadow-none" name="username" placeholder="johndoe_campus" required>
+        </div>
+
+        <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label fw-bold text-uppercase mb-0">Password</label>
+            </div>
+            <input type="password" class="form-control shadow-none" name="password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-auth w-100 text-white shadow-sm mt-2">
+            Sign In
+        </button>
+
+        <div class="text-center my-4">
+            <p class="text-muted small mb-0">New student?
+                <a href="{% url 'register' %}" class="fw-bold text-primary text-decoration-none">Create Account</a>
+            </p>
+        </div>
+
+        <hr class="mt-4 mb-3 opacity-5">
+
+        <div class="text-center">
+            <a href="{% url 'core:index' %}"
+                class="back-link text-decoration-none text-muted small fw-600 justify-content-center">
+                <i class="bi bi-arrow-left"></i> Back to website
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

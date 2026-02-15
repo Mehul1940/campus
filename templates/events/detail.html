@@ -1,0 +1,168 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ event.title }} - Campus Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <a href="{% url 'events:list' %}" class="btn btn-light btn-sm rounded-pill px-3 shadow-sm border">
+                <i class="bi bi-arrow-left me-1"></i> Back to Events
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Event Details Left Column -->
+        <div class="col-lg-8">
+            {% if event.image %}
+            <img src="{{ event.image.url }}" alt="{{ event.title }}"
+                class="img-fluid rounded-4 mb-4 shadow-sm w-100 object-fit-cover" style="max-height: 400px;">
+            {% else %}
+            <div class="rounded-4 mb-4 d-flex align-items-center justify-content-center text-white bg-primary bg-gradient shadow-sm"
+                style="height: 350px;">
+                <i class="bi bi-calendar-event display-1 opacity-50"></i>
+            </div>
+            {% endif %}
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4 p-md-5">
+                    <div class="mb-3">
+                        <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-3 py-2 fw-bold">
+                            {{ event.get_category_display }}
+                        </span>
+                    </div>
+
+                    <h1 class="fw-bolder mb-4">{{ event.title }}</h1>
+
+                    <h5 class="fw-bold mb-3 text-dark">About This Event</h5>
+                    <p class="text-muted mb-5" style="line-height: 1.8;">
+                        {{ event.description }}
+                    </p>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded-4 bg-light h-100">
+                                <h6 class="fw-bold mb-2 d-flex align-items-center">
+                                    <i class="bi bi-geo-alt text-danger me-2"></i> Location
+                                </h6>
+                                <p class="small text-muted mb-0">{{ event.location }}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded-4 bg-light h-100">
+                                <h6 class="fw-bold mb-2 d-flex align-items-center">
+                                    <i class="bi bi-calendar3 text-primary me-2"></i> Date & Time
+                                </h6>
+                                <p class="small text-muted mb-0">
+                                    {{ event.event_date|date:"M d, Y • H:i" }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded-4 bg-light h-100">
+                                <h6 class="fw-bold mb-2 d-flex align-items-center">
+                                    <i class="bi bi-person-circle text-success me-2"></i> Organizer
+                                </h6>
+                                <p class="small text-muted mb-0">
+                                    {{event.organizer.get_full_name|default:event.organizer.username }}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded-4 bg-light h-100">
+                                <h6 class="fw-bold mb-2 d-flex align-items-center">
+                                    <i class="bi bi-people text-info me-2"></i> Capacity
+                                </h6>
+                                <p class="small text-muted mb-0">{{ registrations }} / {{ event.capacity }} registered
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Right Column -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px;">
+                <div class="card-header bg-white border-0 p-4 pb-0">
+                    <h5 class="fw-bold mb-0">Registration</h5>
+                </div>
+                <div class="card-body p-4">
+                    {% now "UTC" as now %}
+                    {% if is_registered %}
+                    <div class="alert alert-success border-0 rounded-4 d-flex align-items-center mb-4">
+                        <i class="bi bi-patch-check-fill me-2 fs-5"></i>
+                        <span class="small fw-bold">You are registered!</span>
+                    </div>
+                    <button class="btn btn-outline-danger w-100  fw-bold py-2 shadow-sm"
+                        onclick="unregisterEvent({{ event.id }})">
+                        <i class="bi bi-x-circle me-1"></i> Cancel Registration
+                    </button>
+                    {% else %}
+                    {% if registrations >= event.capacity or event.event_date < now %} <div
+                        class="alert alert-warning border-0 rounded-4 mb-4">
+                        <i class="bi bi-exclamation-triangle me-2"></i> Event is fully booked or ended
+                </div>
+                <button class="btn btn-secondary w-100 rounded-pill fw-bold py-2 disabled">Cannot Register</button>
+                {% else %}
+                <button class="btn btn-primary w-100 fw-bold py-2 shadow-sm" onclick="registerEvent({{ event.id }})">
+                    <i class="bi bi-plus-lg me-1"></i> Register Now
+                </button>
+                {% endif %}
+                {% endif %}
+
+                <hr class="my-4 opacity-50">
+
+                <div class="mb-2 d-flex justify-content-between">
+                    <span class="small fw-bold">Current Enrollment</span>
+                    <span class="small text-muted">{{ registrations }}/{{ event.capacity }}</span>
+                </div>
+
+                <div class="progress rounded-pill shadow-sm" style="height: 12px;">
+                    {% if event.capacity > 0 %}
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar"
+                        style="width: {% widthratio registrations event.capacity 100 %}%">
+                    </div>
+                    {% else %}
+                    <div class="progress-bar bg-secondary" style="width: 0%"></div>
+                    {% endif %}
+                </div>
+
+                <p class="small text-muted mt-3 text-center">
+                    Secure your spot before the event starts!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    axios.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token }}';
+
+    function registerEvent(eventId) {
+        axios.post(`/events/api/${eventId}/register/`)
+            .then(response => location.reload())
+            .catch(error => {
+                alert(error.response?.data?.message || 'Error registering for event');
+            });
+    }
+
+    function unregisterEvent(eventId) {
+        if (!confirm('Are you sure you want to unregister from this event?')) return;
+        axios.post(`/events/api/${eventId}/unregister/`)
+            .then(response => location.reload())
+            .catch(error => {
+                alert(error.response?.data?.message || 'Error unregistering');
+            });
+    }
+</script>
+{% endblock %}

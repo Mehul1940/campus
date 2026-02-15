@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Announcements - Campus Hub{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <h1 class="page-title">
+            <i class="fas fa-loudspeaker"></i> Announcements
+        </h1>
+        <p class="text-muted">Important campus updates and announcements</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    {% if announcements %}
+    {% for announcement in announcements %}
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-light border-bottom">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="card-title mb-1">{{ announcement.title }}</h5>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar"></i>
+                            {{ announcement.created_at|date:"M d, Y H:i" }}
+                        </small>
+                    </div>
+                    <span class="badge 
+                                {% if announcement.priority == 'urgent' %}bg-danger
+                                {% elif announcement.priority == 'high' %}bg-warning
+                                {% elif announcement.priority == 'normal' %}bg-info
+                                {% else %}bg-success{% endif %}">
+                        {{ announcement.get_priority_display }}
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ announcement.content }}</p>
+            </div>
+            <div class="card-footer bg-light border-top text-muted small">
+                <i class="fas fa-user"></i> {{ announcement.created_by.get_full_name }}
+                {% if announcement.expires_at %}
+                | <i class="fas fa-clock"></i> Expires: {{ announcement.expires_at|date:"M d, Y H:i" }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-lg-12">
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-megaphone" style="font-size: 3rem;"></i>
+            <h5>No announcements at the moment</h5>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

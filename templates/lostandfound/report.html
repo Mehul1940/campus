@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Report Item - Campus Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <a href="{% url 'lostandfound:list' %}"
+                    class="btn btn-link link-secondary p-0 text-decoration-none small fw-bold">
+                    <i class="bi bi-arrow-left me-1"></i> BACK TO LIST
+                </a>
+            </nav>
+            <h1 class="fw-bolder mb-1">
+                <i class="bi bi-megaphone text-primary me-2"></i> Report Item
+            </h1>
+            <p class="text-muted">Fill in the details to help the campus community.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="item_type" class="form-label small fw-bold text-uppercase text-muted">Item
+                                    Type *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i
+                                            class="bi bi-tag"></i></span>
+                                    <input type="text" class="form-control bg-light border-start-0 ps-0" id="item_type"
+                                        name="item_type" placeholder="e.g., Earphones, Wallet" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="item_status"
+                                    class="form-label small fw-bold text-uppercase text-muted">Status *</label>
+                                <select class="form-select bg-light" id="item_status" name="item_status" required>
+                                    <option value="" selected disabled>Choose status...</option>
+                                    <option value="lost">I lost something</option>
+                                    <option value="found">I found something</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="description"
+                                    class="form-label small fw-bold text-uppercase text-muted">Detailed Description
+                                    *</label>
+                                <textarea class="form-control bg-light" id="description" name="description" rows="4"
+                                    placeholder="Please provide unique identifiers (colors, brand, contents, etc.)"
+                                    required></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="location"
+                                    class="form-label small fw-bold text-uppercase text-muted">Location *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i
+                                            class="bi bi-geo-alt"></i></span>
+                                    <input type="text" class="form-control bg-light border-start-0 ps-0" id="location"
+                                        name="location" placeholder="e.g., Library 2nd Floor" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="date_found_lost"
+                                    class="form-label small fw-bold text-uppercase text-muted">Date *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i
+                                            class="bi bi-calendar-event"></i></span>
+                                    <input type="date" class="form-control bg-light border-start-0 ps-0"
+                                        id="date_found_lost" name="date_found_lost" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="image" class="form-label small fw-bold text-uppercase text-muted">Upload
+                                    Photo (Optional)</label>
+                                <div
+                                    class="border border-2 border-dashed rounded-3 p-4 text-center bg-light position-relative">
+                                    <i class="bi bi-cloud-arrow-up fs-2 text-primary"></i>
+                                    <p class="small text-muted mb-0">Click to upload or drag and drop</p>
+                                    <input type="file"
+                                        class="form-control position-absolute opacity-0 top-0 start-0 w-100 h-100 cursor-pointer"
+                                        id="image" name="image" accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                            <a href="{% url 'lostandfound:list' %}"
+                                class="btn btn-light px-4 py-2 fw-bold border">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold shadow-sm">
+                                <i class="bi bi-check-lg me-1"></i> Submit Report
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div
+                class="mt-4 p-3 bg-info-subtle border border-info border-opacity-25 rounded-3 d-flex align-items-center">
+                <i class="bi bi-lightbulb-fill text-info me-3 fs-4"></i>
+                <p class="small mb-0 text-info-emphasis">
+                    <strong>Tip:</strong> Adding a clear photo increases the chances of an item being returned or
+                    identified by 80%.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

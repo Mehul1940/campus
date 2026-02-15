@@ -1,0 +1,98 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Notifications - Campus Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5 align-items-center g-3">
+        <div class="col-md-8">
+            <h1 class="fw-bolder mb-1">
+                <i class="bi bi-bell-fill text-primary me-2"></i>Notifications
+            </h1>
+            <p class="text-muted">Stay updated with your campus activities</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            {% if notifications %}
+            <a href="?mark_read=1" class="btn btn-outline-primary rounded-pill fw-bold btn-sm px-4 shadow-sm">
+                <i class="bi bi-check2-all me-1"></i> Mark All as Read
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            {% if notifications %}
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="list-group list-group-flush">
+                    {% for notification in notifications %}
+                    <div
+                        class="list-group-item p-4 border-start border-4 
+                                {% if not notification.is_read %}bg-primary bg-opacity-10 border-primary{% else %}bg-white border-transparent{% endif %}">
+
+                        <div class="row align-items-center g-3">
+                            <div class="col-auto">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm text-white 
+                                            {% if notification.notification_type == 'order' %}bg-danger
+                                            {% elif notification.notification_type == 'event' %}bg-primary
+                                            {% elif notification.notification_type == 'cleanliness' %}bg-warning
+                                            {% elif notification.notification_type == 'lost_found' %}bg-info
+                                            {% else %}bg-success{% endif %}" style="width: 48px; height: 48px;">
+
+                                    <i class="bi 
+                                                {% if notification.notification_type == 'order' %}bi-bag-check
+                                                {% elif notification.notification_type == 'event' %}bi-calendar-event
+                                                {% elif notification.notification_type == 'cleanliness' %}bi-star-fill
+                                                {% elif notification.notification_type == 'lost_found' %}bi-search
+                                                {% else %}bi-info-circle{% endif %} 
+                                                fs-5"></i>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <h6 class="mb-0 fw-bold {% if not notification.is_read %}text-primary{% endif %}">
+                                        {{ notification.title }}
+                                    </h6>
+                                    <small class="text-muted small">
+                                        {{ notification.created_at|timesince }} ago
+                                    </small>
+                                </div>
+                                <p class="mb-0 text-secondary small">
+                                    {{ notification.message }}
+                                </p>
+                            </div>
+
+                            <div class="col-auto d-flex align-items-center gap-2">
+                                {% if not notification.is_read %}
+                                <span class="badge rounded-pill bg-primary px-2">New</span>
+                                {% endif %}
+
+                                <a href="{% url 'notifications:delete' notification.pk %}"
+                                    class="btn btn-link text-danger p-0 ms-2"
+                                    onclick="return confirm('Delete this notification?')" title="Delete">
+                                    <i class="bi bi-trash3 fs-5"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-5 bg-light rounded-5 border border-dashed">
+                <div class="py-5">
+                    <i class="bi bi-bell-slash text-muted opacity-25 d-block mb-4" style="font-size: 5rem;"></i>
+                    <h4 class="fw-bold">All caught up!</h4>
+                    <p class="text-muted mb-4">You don't have any notifications at the moment.</p>
+                    <a href="{% url 'core:index' %}" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold">
+                        Go to Dashboard
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

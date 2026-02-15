@@ -1,0 +1,93 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Order History - Campus Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12">
+            <h1 class="fw-bolder mb-1">
+                <i class="bi bi-clock-history text-primary me-2"></i>Order History
+            </h1>
+            <p class="text-muted">Manage and track your past canteen orders</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {% if orders %}
+            <div class="row g-4">
+                {% for order in orders %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm border-0 border-start border-primary border-5 rounded-3">
+                        <div class="card-body p-4 d-flex flex-column">
+
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-0">Order #{{ order.id }}</h5>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar-event me-1"></i>{{ order.order_time|date:"M d, Y" }}
+                                    </small>
+                                </div>
+                                <span
+                                    class="badge {% if order.status == 'completed' %}bg-success-subtle text-success border-success{% elif order.status == 'ready' %}bg-info-subtle text-info border-info{% else %}bg-warning-subtle text-warning border-warning{% endif %} border px-2 py-1  small">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </div>
+
+                            <div class="mb-4 flex-grow-1">
+                                <p class="text-uppercase small fw-bold text-secondary mb-2"
+                                    style="letter-spacing: 0.5px;">Items</p>
+                                <ul class="list-unstyled mb-0">
+                                    {% for item in order.items.all %}
+                                    <li
+                                        class="d-flex justify-content-between small mb-1 border-bottom border-light pb-1">
+                                        <span class="text-dark">{{ item.name }}</span>
+                                        <span class="fw-bold text-muted">x{{ item.orderitem_set.first.quantity }}</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mt-auto pt-3">
+                                <div>
+                                    <p class="text-muted small mb-0">Total Amount</p>
+                                    <span class="h5 fw-bold text-primary mb-0">Rs. {{ order.total_amount }}</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'canteen:order_detail' order.id %}"
+                                        class="btn btn-outline-dark btn-sm px-3 fw-bold">
+                                        Details <i class="bi bi-chevron-right ms-1"></i>
+                                    </a>
+
+                                    {% if order.status in 'pending preparing' %}
+                                    <a href="{% url 'canteen:cancel_order' order.id %}"
+                                        class="btn btn-danger btn-sm px-3 fw-bold"
+                                        onclick="return confirm('Are you sure you want to cancel Order #{{ order.id }}?');">
+                                        Cancel
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="bg-light rounded-5 text-center p-5 border">
+                    <div class="py-5">
+                        <i class="bi bi-cart-x text-muted display-1"></i>
+                        <h2 class="fw-bold mt-4">No orders found</h2>
+                        <p class="text-muted mb-4">Hungry? Check out our menu and place your first order!</p>
+                        <a href="{% url 'canteen:menu' %}"
+                            class="btn btn-primary btn-lg px-5 fw-bold rounded-pill shadow-sm">
+                            Browse Menu
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}

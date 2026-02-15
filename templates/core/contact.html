@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %}
+{% block title %}Contact - Campus Hub{% endblock %}
+
+{% block content %}
+<section class="py-5 d-flex align-items-center" style="min-height: 80vh;">
+    <div class="container">
+        <div class="row g-5 justify-content-center align-items-center">
+            <div class="col-lg-4 col-md-10">
+                <div class="pe-lg-4">
+                    <h1 class="fw-800 mb-4 display-5">Let's <span class="text-primary">Talk.</span></h1>
+                    <p class="text-muted mb-5">Have a question about the hub? Our team is here to help you 24/7.</p>
+
+                    <div
+                        class="d-flex align-items-center mb-4 p-3 rounded-4 bg-light bg-opacity-50 border border-transparent transition-all">
+                        <div class="rounded-circle bg-white shadow-sm d-flex align-items-center justify-content-center me-3 text-primary border"
+                            style="width: 48px; height: 48px; min-width: 48px;">
+                            <i class="bi bi-geo-alt fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">Main Office</h6>
+                            <p class="text-muted small mb-0">Admin Block, North Campus</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="d-flex align-items-center mb-4 p-3 rounded-4 bg-light bg-opacity-50 border border-transparent transition-all">
+                        <div class="rounded-circle bg-white shadow-sm d-flex align-items-center justify-content-center me-3 text-primary border"
+                            style="width: 48px; height: 48px; min-width: 48px;">
+                            <i class="bi bi-envelope fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">Email Support</h6>
+                            <p class="text-muted small mb-0">help@campushub.edu</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7 col-md-10">
+                <div class="card shadow-lg border-0 p-4 p-md-5 rounded-4 bg-white">
+                    <h3 class="fw-bold mb-4">Send a Message</h3>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Name</label>
+                                <input type="text" name="name"
+                                    class="form-control form-control-lg bg-light border-0 fs-6" placeholder="Your Name"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Email</label>
+                                <input type="email" name="email"
+                                    class="form-control form-control-lg bg-light border-0 fs-6"
+                                    placeholder="email@campus.edu" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Subject</label>
+                                <input type="text" name="subject"
+                                    class="form-control form-control-lg bg-light border-0 fs-6"
+                                    placeholder="Help with..." required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Message</label>
+                                <textarea name="message" class="form-control bg-light border-0 fs-6" rows="4"
+                                    placeholder="How can we help you?" required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm mt-3 py-3">
+                                    Send Message <i class="bi bi-send ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
